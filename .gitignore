@@ -1,0 +1,31 @@
+# --- R Specific ---
+.Rhistory
+.RData
+.Ruserdata
+.Rapp.history
+.Rproj.user/
+.Renviron
+*.Rproj
+*-Ex.R
+
+# --- R Package / Development ---
+# If you use 'renv' for package management
+renv/library/
+renv/python/
+renv/staging/
+
+# --- Output / Temp Files ---
+# Compiled PDF/HTML from RMarkdown
+*.pdf
+*.html
+*.docx
+*.nb.html
+.Rmarkdown_cache/
+*_cache/
+*_files/
+
+# --- Data (CRITICAL) ---
+# Don't upload raw data files or large local datasets
+*.xlsx
+*.rds
+*.RData

@@ -1,0 +1,100 @@
+---
+title: "Jan 28 Activity"
+author: "Calunod, Carumba, Gementiza, Mingo, Yu"
+date: "Class Group 5 and Canvas Group 2"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Part 1: Load Data
+a. check the first 6 rows and identify any missing values
+```{r}
+setwd("C:/Users/Simon Gabriel/Desktop/COLLEGE/SCHOOL/Data-Analysis/Datasets")
+edata=read.csv("employee_data.csv")
+edata
+```
+
+## Part 2: Select and Filter
+a. Select only the columns Name, Department, and Salary
+```{r}
+library(dplyr)
+edata %>% select(2, 3, 4)
+```
+
+b. Filter employees with a Salary greater than 55,000
+```{r}
+filter(edata, Salary > 55000)
+```
+
+## Part 3: Mutate and Arrange
+a. Create a new column Seniority based on YearsWorked
+```{r}
+edata %>% mutate(Senior = YearsWorked > 5)
+```
+
+b. Arrange employees by Performance descending
+```{r}
+edata %>% arrange(desc(Performance))
+```
+
+c. Describe the last output
+
+Answer: The output displays the employee dataset sorted by performance scores in descending order. This organization places the highest-rated employees at the top of the table, making it easy to identify top performers at a glance.
+
+## Part 4: Grouped Operations
+a. Calculate average salary by Department
+```{r}
+edata %>% group_by(Department) %>%
+  summarise(MeanSalary = mean(Salary))
+```
+
+b. Count the number of employees per Department
+```{r}
+edata %>% group_by(Department) %>%
+  summarise(Frequency = n_distinct(Name))
+```
+
+c. Which department has the highest average salary? Which department has the most employees?
+
+
+Answer: The IT Department has the highest average salary, and both IT and Sales have the most employees.
+
+
+## Part 5: Handling Missing Values
+a. Check for missing values in Performance
+```{r}
+filter(edata, is.na(Performance))
+```
+
+b. Remove rows with missing Performance
+```{r}
+library(tidyr)
+edata_cleaned = edata %>% drop_na(Performance) 
+edata_cleaned
+```
+
+c. Replace missing Performance values with 3 (neutral rating)
+```{r}
+edata_replaced = edata %>% mutate(Performance = ifelse(is.na(Performance), 3, Performance))
+edata_replaced
+```
+
+d. How many missing Performance values were there?
+
+Answer: 2 missing performance values
+
+e. Did replacing them change the average performance rating?
+```{r}
+mean_before = mean(edata$Performance, na.rm=TRUE)
+mean_after = mean(edata_replaced$Performance)
+
+mean_before
+mean_after
+```
+
+Answer: Replacing the missing values with 3 changed the average performance rating
+
+## Part 6: Reflection
+
+Our group primarily utilized the mutate() and select() functions from the dplyr package to restructure the dataset for better readability. By applying group_by() and summarise(), we were able to shift our perspective from looking at individual employee records to understanding broader departmental trends, such as salary distribution and staffing levels. We found that handling missing values is a crucial step in maintaining data integrity; choosing to replace missing performance ratings with a neutral value allowed us to keep all observations in our analysis rather than losing data points through deletion. This process demonstrated how small decisions in data cleaning can subtly influence the final average metrics of a project. In a professional workplace environment, these skills would allow us to provide clear, data-driven reports to management, helping to identify high-performing teams or budget gaps. Ultimately, this activity reinforced the importance of a structured workflow in transforming "messy" data into actionable business intelligence.
