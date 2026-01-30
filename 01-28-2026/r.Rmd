@@ -10,8 +10,7 @@ output:
 ## Part 1: Load Data
 a. check the first 6 rows and identify any missing values
 ```{r}
-setwd("C:/Users/Simon Gabriel/Desktop/COLLEGE/SCHOOL/Data-Analysis/Datasets")
-edata=read.csv("employee_data.csv")
+edata=read.csv("../Datasets/employee_data.csv")
 edata
 ```
 

@@ -1,12 +1,12 @@
 # --- R Specific ---
+.Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-.Rapp.history
-.Rproj.user/
-.Renviron
-*.Rproj
-*-Ex.R
+
+# --- OS Specific (since you swap between Mac/Windows) ---
+.DS_Store
+Thumbs.db
 
 # --- R Package / Development ---
 # If you use 'renv' for package management
