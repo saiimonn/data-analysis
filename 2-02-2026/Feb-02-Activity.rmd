@@ -1,0 +1,57 @@
+---
+title: "Feb 2 Activity"
+author: "Calunod, Carumba, Gementiza, Mingo, Yu"
+date: "Class Group 5 and Canvas Group 2"
+last-updated: "Simon - feb 2 10:33"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r}
+set.seed(15) #Use Class Subject No. then Canvas Group No.
+activity_data <- data.frame(
+StudyHours = rnorm(60, mean = 6, sd = 2),
+Attendance = rnorm(60, mean = 85, sd = 8),
+Score = rnorm(60, mean = 78, sd = 7),
+Gender = sample(c("Male", "Female"), 60, replace = TRUE),
+Group = sample(c("Group 1", "Group 2", "Group 3"), 60,
+
+replace = TRUE))
+
+head(activity_data)
+```
+
+## Compute Summary Statistics for all variables
+
+```{r}
+library(dplyr)
+studyHoursSum = activity_data %>% summarise(
+    across(where(is.numeric),
+        list(mean = mean, sd = sd, min = min, max = max),
+        .names = "{.col}_{fn}")
+)
+
+studyHoursSum
+```
+
+*Questions*
+
+1. What is the average for each numerical variable?
+
+- Study Hours = 6.558928
+- Attendance =  84.13021
+- Score =  76.72484
+
+
+2. Which numerical variable shows the greatest variability?
+- 
+
+
+3. Are there any unusual minimum or maximum values?
+
+
+```{r}
+str(activity_data)
+```
