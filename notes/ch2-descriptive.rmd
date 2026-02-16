@@ -1,0 +1,140 @@
+---
+title: "Chapter 2 - Descriptive Analytics"
+author: "Gementiza"
+date: "Canvas Group 2"
+output:
+  html_document: default
+---
+
+## Plotly and Dash
+
+**Plotly**: visualization library
+
+**Dash**: framework for interactive dashboards
+
+
+## Histogram vs. Density Curve
+
+```{r}
+
+library(ggplot2)
+library(plotly)
+
+set.seed(123)
+x <- rnorm(1000, mean = 50, sd = 10)
+p <- ggplot(data.frame(x), aes(x)) +
+geom_histogram(aes(y = ..density..),
+bins = 30,
+fill = "green",
+color = "black") +
+geom_density(color = "gold", linewidth = 1) +
+labs(title = "Probability Distribution")
+
+ggplotly(p)
+
+```
+
+## Box and Whisker Plots
+Find the median, IQR, whiskers, and outliers.
+
+```{r}
+
+set.seed(123)
+
+data <- data.frame(
+Group = rep(c("A", "B"), each = 50),
+Score = c(rnorm(50, 75, 5), rnorm(50, 85, 7))
+)
+p <- ggplot(data, aes(Group, Score, fill = Group)) +
+geom_boxplot() +
+labs(title = "Box and Whisker Plot")
+
+ggplotly(p)
+```
+
+
+## Scatter Plots
+Discuss relationships, correlations, and trends
+
+```{r}
+
+df <- data.frame(
+StudyHours = rnorm(100, 1, 10),
+Score = 50 + 5 * rnorm(100, 1, 10))
+p <- ggplot(df, aes(StudyHours, Score)) +
+geom_point(alpha = 0.7) +
+geom_smooth(method = "lm", se = TRUE) +
+labs(title = "Scatter Plot with Trend Line")
+
+ggplotly(p)
+
+```
+
+## Time Series Plots
+Highlight trend, seasonality, and irregular components
+
+```{r}
+
+time_data <- data.frame(
+Date = seq.Date(from = as.Date("2024-01-01"),
+by = "month",
+length.out = 12),
+Sales = cumsum(runif(12, 10, 30))
+)
+p <- ggplot(time_data, aes(Date, Sales)) +
+geom_line() +
+geom_point() +
+labs(title = "Time Series Plot")
+
+ggplotly(p)
+
+```
+
+## Bar Charts
+For categorical data
+
+```{r}
+
+category_data <- data.frame(
+Category = c("Math", "Science", "English"),
+Count = c(40, 55, 30)
+)
+p <- ggplot(category_data, aes(Category, Count)) +
+geom_bar(stat = "identity", fill = "steelblue") +
+labs(title = "Bar Chart")
+
+ggplotly(p)
+
+```
+
+## Correlation Heatmaps
+Explain correlation strength and direction
+
+```{r}
+
+library(corrplot)
+
+num_data <- mtcars[, c("mpg", "hp", "wt", "disp")]
+corr_matrix <- cor(num_data)
+corrplot(corr_matrix, method = "color",
+addCoef.col = "white")
+
+```
+
+## Geographical Mapping
+Demographic, sales, and logistics
+
+```{r}
+
+library(leaflet)
+
+leaflet() %>%
+addTiles() %>%
+addMarkers(
+lng = 123.8854,
+lat = 10.3157,
+popup = "Cebu City"
+)
+
+
+```
