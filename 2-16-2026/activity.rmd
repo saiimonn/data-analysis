@@ -1,0 +1,41 @@
+---
+title: "Feb 16 Activity"
+author: "Gementiza"
+date: "Canvas Group 2"
+output:
+  html_document: default
+---
+
+```{r}
+library(ggplot2)
+library(plotly)
+
+set.seed(123)
+x <- rnorm(1000, mean = 50, sd = 10)
+p <- ggplot(data.frame(x), aes(x)) +
+geom_histogram(aes(y = ..density..),
+bins = 30,
+fill = "green",
+color = "black") +
+geom_density(color = "gold", linewidth = 1) +
+labs(title = "Probability Distribution")
+
+ggplotly(p)
+```
+
+## Box and Whisker Plots
+
+```{r}
+
+set.seed(143)
+data <- data.frame(
+Group = rep(c("A", "B"), each = 50),
+Score = c(rnorm(50, 75, 5), rnorm(50, 85, 7))
+)
+p <- ggplot(data, aes(Group, Score, fill = Group)) +
+geom_boxplot() +
+labs(title = "Box and Whisker Plot")
+
+ggplotly(p)
+
+```
