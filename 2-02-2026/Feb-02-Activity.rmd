@@ -1,12 +1,15 @@
 ---
-title: "Feb 2 Activity"
+title: "Activity 1 - Descriptive Data Analytics"
 author: "Calunod, Carumba, Gementiza, Mingo, Yu"
-date: "Class Group 5 and Canvas Group 2"
-last-updated: "Simon - feb 2 10:33"
+date: "2026-02-18"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 
 ```{r}
@@ -15,43 +18,171 @@ activity_data <- data.frame(
 StudyHours = rnorm(60, mean = 6, sd = 2),
 Attendance = rnorm(60, mean = 85, sd = 8),
 Score = rnorm(60, mean = 78, sd = 7),
-Gender = sample(c("Male", "Female"), 60, replace = TRUE),
-Group = sample(c("Group 1", "Group 2", "Group 3"), 60,
+Gender = sample(c("Male", "Female"), 120, replace = TRUE),
+Group = sample(c("Group 1", "Group 2", "Group 3"), 120,
 
 replace = TRUE))
 
 head(activity_data)
 ```
+## Including Plots
 
-## Compute Summary Statistics for all variables
+You can also embed plots, for example:
 
-```{r}
-library(dplyr)
-studyHoursSum = activity_data %>% summarise(
-    across(where(is.numeric),
-        list(mean = mean, sd = sd, min = min, max = max),
-        .names = "{.col}_{fn}")
-)
-
-studyHoursSum
+```{r pressure, echo=FALSE}
+plot(pressure)
 ```
 
-*Questions*
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-1. What is the average for each numerical variable?
+## A. Compute summary statistics for all variables.
 
-- Study Hours = 6.558928
-- Attendance =  84.13021
-- Score =  76.72484
+```{r}
+summary(activity_data)
+
+sapply(activity_data[, sapply(activity_data, is.numeric)], sd)
+
+sapply(activity_data[, sapply(activity_data, is.numeric)], var)
+
+sapply(activity_data[, sapply(activity_data, is.numeric)], range)
+
+```
+ 1. What is the average for each numerical variable?
+ - StudyHours: 6.559
+ - Attendance: 84.13
+- Score: 76.72
+
+ 2. Which numerical variable shows the greatest variability?
+- The variable Attendance shows the greatest variability
+
+ 3. Are there any unusual minimum or maximum values?
+ - Attendance has an unusual maximum value (103.68), which exceeds 100%.
 
 
-2. Which numerical variable shows the greatest variability?
-- 
 
-
-3. Are there any unusual minimum or maximum values?
-
-
+## B. Run str(activity_data)
 ```{r}
 str(activity_data)
+# 1. What is the object class?
+#  - data.frame
+# 2. What are the dimensions?
+#  - 60 x 5, from the 60 obs. of 5 variables
+# 3. What are the variable list?
+#  - StudyHours, Attendance, Score, Gender, Group
+#4. What are the data types?
+
+sapply(activity_data, class)
+``` 
+
+
+
+
+
+
+## Letter C (Answer)
+```{r}
+
+sum(activity_data$Score > 85)
+# 14 students scored above 85
+
+mean(activity_data$Score > 85)
+# 11.67%
+
+# 1. The probability 0.1167 is an empirical probability
+
 ```
+
+## D. Visualize the distribution of scores using the function hist(activity_data).
+
+```{r}
+
+hist(activity_data$Score,
+     main = "Distribution of scores",
+     xlab = "Scores",
+     col = "steelblue",
+     border = "white"
+     )
+```
+
+1. Does the distribution appear approximately normal?
+Answer: the distribution of scores is approximately normal as it displays a clear unimodal peak between 75 and 80. The data is relatively symmetric and tapers off toward the tails, forming the characteristic bell shape expected from your rnorm generation.
+
+
+2. Is the normal distribution a reasonable assumption?
+Answer: The normal distribution is a reasonable assumption because the histogram lacks extreme skewness or outliers that would invalidate parametric testing. Since the data was explicitly sampled from a normal distribution and the sample size ($n=60$) is sufficiently large, the assumptions for your statistical analysis are well-supported.
+
+
+
+## E. Identify the theoretical expectation and variance of variable
+##score.
+
+
+## 1. Are these exact values or estimates? Why?
+```{r}
+
+mean(activity_data$Score)
+var(activity_data$Score)
+```
+
+The theoretical expectation is 78 (hard-coded mean)
+and the variance is 49 (based on the hard-coded standard deviation squared)
+
+Those are the exact values as they were the values used to generate the dataset.
+Despite the calculated mean and variance being different from these numbers, those are still the exact values.
+
+
+
+
+## F. Compute the correlation matrix for the numerical variables and
+## interpret the results.
+```{r}
+numeric_data <- activity_data[, c("StudyHours", "Attendance", "Score")]
+
+cor_matrix <- cor(numeric_data)
+
+print(round(cor_matrix, 2))
+```
+The closer to 1 the correlation value, the greater the correlation between the value.
+
+All of the values variables show a very weak correlation between each other, with Attendance and Score having the least correlation with 0.04, while the Attendance and Study Hours have the greatest among all of them, with only 0.15.
+
+There are little to no relationship between the variables
+
+
+## G. Run the oneway test. Are the mean Scores significantly different among Groups?
+
+```{r}
+group_test = oneway.test(Score ~ Group, data = activity_data, var.equal = FALSE)
+
+group_test
+
+boxplot(Score ~ Group, 
+        data = activity_data,
+        main = "Comparison of Scores by Group",
+        xlab = "Group",
+        ylab = "Score",
+        col = c("lightblue", "lightgreen", "lightpink"))
+
+```
+
+<!-- ```{r}
+
+anova_model = aov(Score ~ Group, data = activity_data)
+
+tukey_results = TukeyHSD(anova_model)
+
+print(tukey_results)
+
+plot(tukey_results)
+
+``` -->
+
+**Conclusion**: There is no significant difference in the mean Scores among the three Groups. This means that the group membership does not significantly affect the students' scores in this dataset.
+
+
+## H.Run the chisq.test. Is there a significant association between
+## Gender and Group?
+```{r} 
+chisq.test(activity_data$Gender, activity_data$Group)
+```
+The p-value is 0.7413 There is no significant association between Gender and Group because the p-value is greater than 0.05
